@@ -16,31 +16,40 @@ class MultipassCommand(PluginCommand):
         ::
 
           Usage:
-                multipass --file=FILE
                 multipass list
+                multipass images
+                multipass start [NAME]
+                multipass stop [NAME]
+                multipass delete [NAME]
+                multipass shell [NAME]
+                multipass run [NAME]
 
-          This command does some useful things.
+          Interface to multipass
 
           Arguments:
-              FILE   a file name
+              NAME   the name of the virtual machine
 
           Options:
               -f      specify the file
 
         """
-        arguments.FILE = arguments['--file'] or None
+        name = arguments.NAME
 
         VERBOSE(arguments)
 
-        m = Manager()
 
-        if arguments.FILE:
-            print("option a")
-            m.list(path_expand(arguments.FILE))
+        if arguments.list:
 
-        elif arguments.list:
-            print("option b")
-            m.list("just calling list without parameter")
+            print("list")
 
-        Console.error("This is just a sample")
+            return ""
+
+        elif arguments.images:
+
+            print("images")
+
+            return ""
+        
+        else:
+            Console.error("Not yet implemented")
         return ""
