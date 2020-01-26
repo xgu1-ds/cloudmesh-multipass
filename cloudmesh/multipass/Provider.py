@@ -6,7 +6,7 @@ from cloudmesh.common.util import banner
 
 class Provider:
 
-    def __init__(self, name):
+    def __init__(self, name=None):
         self.name = name
 
     def start(self):
@@ -50,7 +50,7 @@ class Provider:
 
 if __name__ == "__main__":
     # excellent-titmouse is multipass instance name
-    p = Provider("excellent-titmouse")
+    p = Provider(name="cloudmesh")
     p.list()
     p.start()
     p.list()
