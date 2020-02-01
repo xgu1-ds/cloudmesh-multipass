@@ -21,15 +21,18 @@ class MultipassCommand(PluginCommand):
         ::
 
           Usage:
-                multipass list [--dryrun]
-                multipass images [--dryrun]
-                multipass start NAMES [--dryrun]
-                multipass stop NAMES [--dryrun]
-                multipass delete NAMES [--dryrun]
+                multipass list [--output=OUTPUT] [--dryrun]
+                multipass images [--output=OUTPUT] [--dryrun]
+                multipass start NAMES [--output=OUTPUT] [--dryrun]
+                multipass stop NAMES [--output=OUTPUT] [--dryrun]
+                multipass delete NAMES [--output=OUTPUT][--dryrun]
                 multipass shell NAMES [--dryrun]
-                multipass run COMMAND NAMES [--dryrun]
+                multipass run COMMAND NAMES [--output=OUTPUT] [--dryrun]
 
           Interface to multipass
+
+          Options:
+               --output=OUTPUT  the output format [default: table]
 
           Arguments:
               NAMES   the names of the virtual machine
@@ -45,22 +48,18 @@ class MultipassCommand(PluginCommand):
         """
         name = arguments.NAME
 
-        #
-        # we will show you how to ad a --output parameter for the
-        # list and images as well as the run command in future
-        #
-        # variables = Variables()
-        #
-        # arguments.output = Parameter.find("output",
-        #                                   arguments,
-        #                                   variables,
-        #                                   "table")
-
-        #
-        # converts --dryrun to dryrun so we can use arguments.dryrun
-        #
         map_parameters(arguments,
-                       'dryrun')
+                       "dryrun",
+                       "refresh",
+                       "cloud",
+                       "output")
+
+        variables = Variables()
+
+        arguments.output = Parameter.find("output",
+                                          arguments,
+                                          variables,
+                                          "table")
 
         names = Parameter.expand(arguments.NAMES)
 
@@ -83,7 +82,9 @@ class MultipassCommand(PluginCommand):
             else:
 
                 provider = Provider()
-                provider.images()
+                images = provider.images()
+
+                print(provider.Print(images, kind='image', output=arguments.output))
 
             return ""
 
