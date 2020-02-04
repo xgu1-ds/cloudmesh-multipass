@@ -16,10 +16,17 @@ class Provider(ComputeNodeABC):
         "vm": {
             "sort_keys": ["cm.name"],
             "order": ["cm.name",
-                      "cm.cloud"],
+                      "cm.cloud",
+                      "ipv4",
+                      "name",
+                      "release",
+                      "state"],
             "header": ["Name",
                        "Cloud",
-                       ],
+                       "Address",
+                       "Name",
+                       "Release",
+                       "State"],
         },
         "image": {
             "sort_keys": ["cm.name"],
@@ -155,6 +162,11 @@ class Provider(ComputeNodeABC):
         result = self._images()
         result = [result[name]]
         return self.update_dict(result, kind="image")
+
+    def _vm(self):
+        result = Shell.run("multipass list --format=json")
+        result = eval(result)['list']
+        return result
 
     # IMPLEMENT
     def start(self, name=None):
